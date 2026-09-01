@@ -13,6 +13,21 @@
   stop("유동인구 데이터에서 'pageProps.floatingData.data' 좌표 목록을 찾을 수 없습니다.")
 }
 
+.floating_points_to_features <- function(points) {
+  features <- list()
+  for (pt in points) {
+    if (!is.list(pt) || length(pt) < 3L) next
+    lat <- pt[[1]]; lng <- pt[[2]]; count <- pt[[3]]
+
+    features[[length(features) + 1L]] <- list(
+      type = "Feature",
+      geometry = list(type = "Point", coordinates = list(lng, lat)),
+      properties = list(count = count)
+    )
+  }
+  features
+}
+
 #' 유동인구 데이터를 GeoJSON(Point FeatureCollection)으로 저장한다
 #'
 #' 1) 먼저 \code{script_path}(요청 스크립트, R 코드)를 실행해 실시간 데이터를
@@ -39,18 +54,7 @@ build_floating_geojson <- function(source_path, script_path = NULL, out_path = N
   }
 
   points <- .extract_floating_points(data)
-
-  features <- list()
-  for (pt in points) {
-    if (!is.list(pt) || length(pt) < 3L) next
-    lat <- pt[[1]]; lng <- pt[[2]]; count <- pt[[3]]
-
-    features[[length(features) + 1L]] <- list(
-      type = "Feature",
-      geometry = list(type = "Point", coordinates = list(lng, lat)),
-      properties = list(count = count)
-    )
-  }
+  features <- .floating_points_to_features(points)
 
   geojson <- list(type = "FeatureCollection", features = features)
 

@@ -6,6 +6,27 @@
   stop("카드매출 데이터에서 geohash 레코드 목록을 찾을 수 없습니다.")
 }
 
+.card_records_to_features <- function(records) {
+  features <- list()
+  for (rec in records) {
+    geohash <- rec[["geohash"]]
+    if (is.null(geohash) || !nzchar(geohash)) next
+
+    coords <- tryCatch(bbox_polygon_coords(geohash), error = function(e) NULL)
+    if (is.null(coords)) next
+
+    properties <- rec[setdiff(names(rec), "geohash")]
+    properties[["geohash"]] <- geohash
+
+    features[[length(features) + 1L]] <- list(
+      type = "Feature",
+      geometry = list(type = "Polygon", coordinates = coords),
+      properties = properties
+    )
+  }
+  features
+}
+
 #' 카드매출 데이터를 GeoJSON(geohash 격자 Polygon FeatureCollection)으로 저장한다
 #'
 #' 1) 먼저 \code{script_path}(요청 스크립트, R 코드)를 실행해 실시간 데이터를
@@ -32,24 +53,7 @@ build_card_geojson <- function(source_path, script_path = NULL, out_path = NULL,
   }
 
   records <- .extract_card_records(data)
-
-  features <- list()
-  for (rec in records) {
-    geohash <- rec[["geohash"]]
-    if (is.null(geohash) || !nzchar(geohash)) next
-
-    coords <- tryCatch(bbox_polygon_coords(geohash), error = function(e) NULL)
-    if (is.null(coords)) next
-
-    properties <- rec[setdiff(names(rec), "geohash")]
-    properties[["geohash"]] <- geohash
-
-    features[[length(features) + 1L]] <- list(
-      type = "Feature",
-      geometry = list(type = "Polygon", coordinates = coords),
-      properties = properties
-    )
-  }
+  features <- .card_records_to_features(records)
 
   geojson <- list(type = "FeatureCollection", features = features)
 

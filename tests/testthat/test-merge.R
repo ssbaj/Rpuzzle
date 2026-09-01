@@ -1,7 +1,7 @@
 test_that("merge_floating_json concatenates plain-array point lists", {
   f1 <- tempfile(fileext = ".txt")
   f2 <- tempfile(fileext = ".txt")
-  out <- tempfile(fileext = ".txt")
+  out <- tempfile(fileext = ".json")
   on.exit(unlink(c(f1, f2, out)))
 
   writeLines('[[37.5, 127.0, 10]]', f1, useBytes = TRUE)
@@ -17,7 +17,7 @@ test_that("merge_floating_json concatenates plain-array point lists", {
 test_that("merge_floating_json keeps the $data wrapper and sibling fields", {
   f1 <- tempfile(fileext = ".txt")
   f2 <- tempfile(fileext = ".txt")
-  out <- tempfile(fileext = ".txt")
+  out <- tempfile(fileext = ".json")
   on.exit(unlink(c(f1, f2, out)))
 
   writeLines('{"data": [[1, 2, 3]], "meta": "x"}', f1, useBytes = TRUE)
@@ -34,7 +34,7 @@ test_that("merge_floating_json keeps the $data wrapper and sibling fields", {
 test_that("merge_card_json concatenates geohash records under $data", {
   c1 <- tempfile(fileext = ".txt")
   c2 <- tempfile(fileext = ".txt")
-  out <- tempfile(fileext = ".txt")
+  out <- tempfile(fileext = ".json")
   on.exit(unlink(c(c1, c2, out)))
 
   writeLines('{"data": [{"geohash": "a", "amount": 1}]}', c1, useBytes = TRUE)
@@ -51,7 +51,7 @@ test_that("merge_card_json concatenates geohash records under $data", {
 test_that("merge_area_json concatenates areas under $contents", {
   a1 <- tempfile(fileext = ".txt")
   a2 <- tempfile(fileext = ".txt")
-  out <- tempfile(fileext = ".txt")
+  out <- tempfile(fileext = ".json")
   on.exit(unlink(c(a1, a2, out)))
 
   writeLines('{"contents": [{"areaId": "1"}]}', a1, useBytes = TRUE)
@@ -64,7 +64,7 @@ test_that("merge_area_json concatenates areas under $contents", {
   expect_length(merged$contents, 3)
 })
 
-test_that("merge_floating_json defaults out_path to '<dir>/유동인구_merged.txt'", {
+test_that("merge_floating_json defaults out_path to '<dir>/유동인구_merged.json'", {
   dir <- tempfile()
   dir.create(dir)
   f1 <- file.path(dir, "float1.txt")
@@ -75,6 +75,36 @@ test_that("merge_floating_json defaults out_path to '<dir>/유동인구_merged.t
   writeLines('[[4, 5, 6]]', f2, useBytes = TRUE)
 
   result <- merge_floating_json(f1, f2)
-  expect_equal(basename(result$out_path), "유동인구_merged.txt")
+  expect_equal(basename(result$out_path), "유동인구_merged.json")
+  expect_true(file.exists(result$out_path))
+})
+
+test_that("merge_card_json defaults out_path to '<dir>/카드매출_merged.json'", {
+  dir <- tempfile()
+  dir.create(dir)
+  c1 <- file.path(dir, "card1.txt")
+  c2 <- file.path(dir, "card2.txt")
+  on.exit(unlink(dir, recursive = TRUE))
+
+  writeLines('{"data": [{"geohash": "a", "amount": 1}]}', c1, useBytes = TRUE)
+  writeLines('{"data": [{"geohash": "b", "amount": 2}]}', c2, useBytes = TRUE)
+
+  result <- merge_card_json(c1, c2)
+  expect_equal(basename(result$out_path), "카드매출_merged.json")
+  expect_true(file.exists(result$out_path))
+})
+
+test_that("merge_area_json defaults out_path to '<dir>/상권_merged.json'", {
+  dir <- tempfile()
+  dir.create(dir)
+  a1 <- file.path(dir, "area1.txt")
+  a2 <- file.path(dir, "area2.txt")
+  on.exit(unlink(dir, recursive = TRUE))
+
+  writeLines('{"contents": [{"areaId": "1"}]}', a1, useBytes = TRUE)
+  writeLines('{"contents": [{"areaId": "2"}]}', a2, useBytes = TRUE)
+
+  result <- merge_area_json(a1, a2)
+  expect_equal(basename(result$out_path), "상권_merged.json")
   expect_true(file.exists(result$out_path))
 })

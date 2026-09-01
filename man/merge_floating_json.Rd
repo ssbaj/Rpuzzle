@@ -12,7 +12,7 @@ merge_floating_json(path1, path2, out_path = NULL, log = NULL)
 \item{path2}{두 번째 유동인구 JSON 파일 경로.}
 
 \item{out_path}{출력 JSON 경로. \code{NULL}이면 \code{path1}과 같은 폴더에
-"유동인구_merged.txt"로 저장한다.}
+"유동인구_merged.json"으로 저장한다.}
 
 \item{log}{진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.}
 }

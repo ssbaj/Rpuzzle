@@ -1,7 +1,7 @@
 # 같은 종류(유동인구/카드매출/상권)의 JSON 파일 2개를 하나로 합친다.
 # 각 파일의 데이터 목록(포인트/레코드/상권 배열)을 찾아 이어붙인 뒤,
 # 첫 번째 파일의 구조(배열 그대로 / data 필드 / pageProps 중첩 / contents 필드)를
-# 그대로 유지한 채 합쳐진 목록을 다시 그 자리에 채워 넣는다.
+# 그대로 유지한 채 합쳐진 목록을 다시 그 자리에 채워 넣고 JSON으로 저장한다.
 
 .rebuild_floating <- function(template, points) {
   if (.is_json_array(template)) return(points)
@@ -50,7 +50,7 @@
 #' @param path1 첫 번째 유동인구 JSON 파일 경로.
 #' @param path2 두 번째 유동인구 JSON 파일 경로.
 #' @param out_path 출력 JSON 경로. \code{NULL}이면 \code{path1}과 같은 폴더에
-#'   "유동인구_merged.txt"로 저장한다.
+#'   "유동인구_merged.json"으로 저장한다.
 #' @param log 진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.
 #' @return \code{list(out_path = ..., count = ...)}.
 #' @export
@@ -69,7 +69,7 @@ merge_floating_json <- function(path1, path2, out_path = NULL, log = NULL) {
   if (is.null(out_path)) {
     dir <- dirname(path1)
     if (!nzchar(dir)) dir <- "."
-    out_path <- file.path(dir, "유동인구_merged.txt")
+    out_path <- file.path(dir, "유동인구_merged.json")
   }
 
   jsonlite::write_json(merged, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)
@@ -86,7 +86,7 @@ merge_floating_json <- function(path1, path2, out_path = NULL, log = NULL) {
 #' @param path1 첫 번째 카드매출 JSON 파일 경로.
 #' @param path2 두 번째 카드매출 JSON 파일 경로.
 #' @param out_path 출력 JSON 경로. \code{NULL}이면 \code{path1}과 같은 폴더에
-#'   "카드매출_merged.txt"로 저장한다.
+#'   "카드매출_merged.json"으로 저장한다.
 #' @param log 진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.
 #' @return \code{list(out_path = ..., count = ...)}.
 #' @export
@@ -105,7 +105,7 @@ merge_card_json <- function(path1, path2, out_path = NULL, log = NULL) {
   if (is.null(out_path)) {
     dir <- dirname(path1)
     if (!nzchar(dir)) dir <- "."
-    out_path <- file.path(dir, "카드매출_merged.txt")
+    out_path <- file.path(dir, "카드매출_merged.json")
   }
 
   jsonlite::write_json(merged, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)
@@ -122,7 +122,7 @@ merge_card_json <- function(path1, path2, out_path = NULL, log = NULL) {
 #' @param path1 첫 번째 상권 JSON 파일 경로.
 #' @param path2 두 번째 상권 JSON 파일 경로.
 #' @param out_path 출력 JSON 경로. \code{NULL}이면 \code{path1}과 같은 폴더에
-#'   "상권_merged.txt"로 저장한다.
+#'   "상권_merged.json"으로 저장한다.
 #' @param log 진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.
 #' @return \code{list(out_path = ..., count = ...)}.
 #' @export
@@ -141,7 +141,7 @@ merge_area_json <- function(path1, path2, out_path = NULL, log = NULL) {
   if (is.null(out_path)) {
     dir <- dirname(path1)
     if (!nzchar(dir)) dir <- "."
-    out_path <- file.path(dir, "상권_merged.txt")
+    out_path <- file.path(dir, "상권_merged.json")
   }
 
   jsonlite::write_json(merged, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)

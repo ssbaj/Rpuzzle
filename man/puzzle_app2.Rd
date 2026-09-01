@@ -11,6 +11,6 @@ puzzle_app2()
 }
 \description{
 유동인구/카드매출/상권 JSON 파일을 각각 2개씩 지정하고 버튼을 클릭하면
-두 파일의 데이터를 하나로 합친 "_merged.txt" JSON 파일을 생성하는
+두 파일의 데이터를 하나로 합친 "_merged.json" 파일을 생성하는
 Tcl/Tk 팝업창을 띄운다.
 }
