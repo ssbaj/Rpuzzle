@@ -4,7 +4,12 @@
 \alias{build_card_geojson}
 \title{카드매출 데이터를 GeoJSON(geohash 격자 Polygon FeatureCollection)으로 저장한다}
 \usage{
-build_card_geojson(source_path, script_path = NULL, out_path = NULL, log = NULL)
+build_card_geojson(
+  source_path,
+  script_path = NULL,
+  out_path = NULL,
+  log = NULL
+)
 }
 \arguments{
 \item{source_path}{카드매출.txt (JSON) 파일 경로.}

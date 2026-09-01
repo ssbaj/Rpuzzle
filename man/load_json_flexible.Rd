@@ -11,7 +11,7 @@ load_json_flexible(path)
 }
 \value{
 \code{jsonlite::fromJSON(..., simplifyVector = FALSE)}로 파싱된
-중첩 list.
+  중첩 list.
 }
 \description{
 인코딩을 몰라도(UTF-8 / UTF-8 BOM / CP949 / EUC-KR) JSON 파일을 읽어들인다

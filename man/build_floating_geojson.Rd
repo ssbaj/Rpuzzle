@@ -4,7 +4,12 @@
 \alias{build_floating_geojson}
 \title{유동인구 데이터를 GeoJSON(Point FeatureCollection)으로 저장한다}
 \usage{
-build_floating_geojson(source_path, script_path = NULL, out_path = NULL, log = NULL)
+build_floating_geojson(
+  source_path,
+  script_path = NULL,
+  out_path = NULL,
+  log = NULL
+)
 }
 \arguments{
 \item{source_path}{유동인구.txt (JSON) 파일 경로.}

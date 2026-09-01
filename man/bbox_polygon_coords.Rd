@@ -11,7 +11,7 @@ bbox_polygon_coords(geohash)
 }
 \value{
 GeoJSON Polygon의 \code{coordinates} 필드에 바로 넣을 수 있는
-중첩 리스트 (1개의 링, 5개의 [lon, lat] 점).
+  중첩 리스트 (1개의 링, 5개의 [lon, lat] 점).
 }
 \description{
 반시계 방향, 첫 점과 끝 점이 같은 좌표 리스트를 반환한다.

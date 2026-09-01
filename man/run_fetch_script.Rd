@@ -14,7 +14,7 @@ run_fetch_script(script_path, timeout = 6)
 }
 \value{
 \code{list(data = ..., fail_reason = ...)}. 성공 시 \code{data}에
-파싱된 JSON, 실패 시 \code{data = NULL}과 \code{fail_reason} 문자열.
+  파싱된 JSON, 실패 시 \code{data = NULL}과 \code{fail_reason} 문자열.
 }
 \description{
 파이썬 버전은 \code{requests.get(...)} 호출로 끝나는 파이썬 스크립트를
