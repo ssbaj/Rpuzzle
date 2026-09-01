@@ -10,7 +10,7 @@ build_area_geojson(source_path, out_path = NULL, log = NULL)
 \item{source_path}{상권.txt (JSON) 파일 경로.}
 
 \item{out_path}{출력 GeoJSON 경로. \code{NULL}이면 \code{source_path}와
-같은 폴더에 "상권.geojson"으로 저장한다.}
+같은 폴더에 "상권_YYMMDDHHMMSS.geojson"(생성 시각)으로 저장한다.}
 
 \item{log}{진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.}
 }

@@ -90,7 +90,7 @@ puzzle_app <- function() {
               icon = "error")
       return(invisible(NULL))
     }
-    .notify("완료", sprintf("유동인구.geojson 생성 완료\n\n%s\n지점 수: %d", result$out_path, result$count))
+    .notify("완료", sprintf("유동인구 GeoJSON 생성 완료\n\n%s\n지점 수: %d", result$out_path, result$count))
   }
 
   generate_card <- function() {
@@ -105,7 +105,7 @@ puzzle_app <- function() {
               icon = "error")
       return(invisible(NULL))
     }
-    .notify("완료", sprintf("카드매출.geojson 생성 완료\n\n%s\n격자 수: %d", result$out_path, result$count))
+    .notify("완료", sprintf("카드매출 GeoJSON 생성 완료\n\n%s\n격자 수: %d", result$out_path, result$count))
   }
 
   generate_area <- function() {
@@ -120,7 +120,7 @@ puzzle_app <- function() {
               icon = "error")
       return(invisible(NULL))
     }
-    .notify("완료", sprintf("상권.geojson 생성 완료\n\n%s\n상권 수: %d", result$out_path, result$count))
+    .notify("완료", sprintf("상권 GeoJSON 생성 완료\n\n%s\n상권 수: %d", result$out_path, result$count))
   }
 
   add_file_row(frame, "유동인구 데이터 (유동인구.txt)", floating_var)

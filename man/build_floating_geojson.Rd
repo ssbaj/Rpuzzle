@@ -17,7 +17,7 @@ build_floating_geojson(
 \item{script_path}{실시간 재수집용 R 스크립트 경로. \code{NULL}이면 건너뛴다.}
 
 \item{out_path}{출력 GeoJSON 경로. \code{NULL}이면 \code{source_path}와
-같은 폴더에 "유동인구.geojson"으로 저장한다.}
+같은 폴더에 "유동인구_YYMMDDHHMMSS.geojson"(생성 시각)으로 저장한다.}
 
 \item{log}{진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.}
 }

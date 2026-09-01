@@ -44,7 +44,7 @@
 #'
 #' @param source_path 상권.txt (JSON) 파일 경로.
 #' @param out_path 출력 GeoJSON 경로. \code{NULL}이면 \code{source_path}와
-#'   같은 폴더에 "상권.geojson"으로 저장한다.
+#'   같은 폴더에 "상권_YYMMDDHHMMSS.geojson"(생성 시각)으로 저장한다.
 #' @param log 진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.
 #' @return \code{list(out_path = ..., count = ...)}.
 #' @export
@@ -60,7 +60,7 @@ build_area_geojson <- function(source_path, out_path = NULL, log = NULL) {
   if (is.null(out_path)) {
     dir <- dirname(source_path)
     if (!nzchar(dir)) dir <- "."
-    out_path <- file.path(dir, "상권.geojson")
+    out_path <- file.path(dir, sprintf("상권_%s.geojson", .output_timestamp()))
   }
 
   jsonlite::write_json(geojson, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)

@@ -37,7 +37,7 @@
 #' @param source_path 유동인구.txt (JSON) 파일 경로.
 #' @param script_path 실시간 재수집용 R 스크립트 경로. \code{NULL}이면 건너뛴다.
 #' @param out_path 출력 GeoJSON 경로. \code{NULL}이면 \code{source_path}와
-#'   같은 폴더에 "유동인구.geojson"으로 저장한다.
+#'   같은 폴더에 "유동인구_YYMMDDHHMMSS.geojson"(생성 시각)으로 저장한다.
 #' @param log 진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.
 #' @return \code{list(out_path = ..., count = ...)}.
 #' @export
@@ -61,7 +61,7 @@ build_floating_geojson <- function(source_path, script_path = NULL, out_path = N
   if (is.null(out_path)) {
     dir <- dirname(source_path)
     if (!nzchar(dir)) dir <- "."
-    out_path <- file.path(dir, "유동인구.geojson")
+    out_path <- file.path(dir, sprintf("유동인구_%s.geojson", .output_timestamp()))
   }
 
   jsonlite::write_json(geojson, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)

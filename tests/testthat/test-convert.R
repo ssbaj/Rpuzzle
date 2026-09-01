@@ -78,3 +78,33 @@ test_that("build_floating_geojson converts [lat, lng, count] points into a Point
   expect_equal(unlist(feature$geometry$coordinates), c(127.0, 37.5))
   expect_equal(feature$properties$count, 42)
 })
+
+test_that("build_*_geojson default out_path embeds a '<name>_YYMMDDHHMMSS.geojson' timestamp", {
+  dir <- tempfile()
+  dir.create(dir)
+  on.exit(unlink(dir, recursive = TRUE))
+
+  ts_pattern <- "^[0-9]{12}$"
+
+  float_src <- file.path(dir, "float.txt")
+  writeLines('[[37.5, 127.0, 1]]', float_src, useBytes = TRUE)
+  float_result <- build_floating_geojson(float_src, script_path = NULL)
+  float_name <- sub("\\.geojson$", "", basename(float_result$out_path))
+  expect_match(float_name, "^유동인구_")
+  expect_match(sub("^유동인구_", "", float_name), ts_pattern)
+
+  card_src <- file.path(dir, "card.txt")
+  writeLines('{"data": [{"geohash": "s", "amount": 1}]}', card_src, useBytes = TRUE)
+  card_result <- build_card_geojson(card_src, script_path = NULL)
+  card_name <- sub("\\.geojson$", "", basename(card_result$out_path))
+  expect_match(card_name, "^카드매출_")
+  expect_match(sub("^카드매출_", "", card_name), ts_pattern)
+
+  area_src <- file.path(dir, "area.txt")
+  writeLines('{"contents": [{"areaId": "1", "areaMetaDetail": {"geometry": {"type": "Point", "coordinates": [0, 0]}}}]}',
+             area_src, useBytes = TRUE)
+  area_result <- build_area_geojson(area_src)
+  area_name <- sub("\\.geojson$", "", basename(area_result$out_path))
+  expect_match(area_name, "^상권_")
+  expect_match(sub("^상권_", "", area_name), ts_pattern)
+})

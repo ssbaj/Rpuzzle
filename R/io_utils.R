@@ -7,6 +7,9 @@
   if (length(raw) >= 3 && identical(raw[1:3], bom)) raw[-(1:3)] else raw
 }
 
+# 출력 파일명에 붙일 생성 시각 문자열. 예: 2026-09-01 11:30:20 -> "260901113020".
+.output_timestamp <- function() format(Sys.time(), "%y%m%d%H%M%S")
+
 #' 인코딩을 몰라도(UTF-8 / UTF-8 BOM / CP949 / EUC-KR) JSON 파일을 읽어들인다
 #'
 #' @param path JSON 파일 경로.
