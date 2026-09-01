@@ -1,0 +1,18 @@
+Package: Rpuzzle
+Type: Package
+Title: Puzzle Sanggwon Data GeoJSON Converter
+Version: 0.0.1
+Authors@R: person("ssb9018", email = "ssb9018@ajou.ac.kr", role = c("aut", "cre"))
+Description: 퍼즐(puzzle.geovision.co.kr) 유동인구/카드매출/상권 원본 데이터(txt)를
+    GeoJSON으로 변환하는 도구. 파이썬 pypuzzle 패키지를 R로 이식한 버전이며,
+    Tcl/Tk 팝업창을 통해 파일을 지정하고 GeoJSON을 생성할 수 있다.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Imports:
+    jsonlite,
+    httr
+Suggests:
+    tcltk,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+RoxygenNote: 7.3.2
