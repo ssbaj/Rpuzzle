@@ -2,13 +2,14 @@
 % Please edit documentation in R/convert_card.R
 \name{build_card_geojson}
 \alias{build_card_geojson}
-\title{카드매출 데이터를 GeoJSON(geohash 격자 Polygon FeatureCollection)으로 저장한다}
+\title{카드매출 데이터를 GeoJSON(정사각형 격자 Polygon FeatureCollection)으로 저장한다}
 \usage{
 build_card_geojson(
   source_path,
   script_path = NULL,
   out_path = NULL,
-  log = NULL
+  log = NULL,
+  cell_size = 50
 )
 }
 \arguments{
@@ -20,12 +21,25 @@ build_card_geojson(
 같은 폴더에 "카드매출_YYMMDDHHMMSS.geojson"(생성 시각)으로 저장한다.}
 
 \item{log}{진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.}
+
+\item{cell_size}{격자 한 칸의 크기(m). 유동인구 격자와 맞추려면 그 격자의
+\code{cell_size}를 그대로 지정한다. 기본값은 50m.}
 }
 \value{
-\code{list(out_path = ..., count = ...)}.
+\code{list(out_path = ..., count = ...)}. \code{count}는 격자에
+  집계된 원본 geohash 레코드 수다.
 }
 \description{
 1) 먼저 \code{script_path}(요청 스크립트, R 코드)를 실행해 실시간 데이터를
 시도한다. 2) 실패하면 원본 \code{source_path}(캐시된 JSON)를 사용한다.
 자세한 내용은 \code{\link{run_fetch_script}}를 참고한다.
+}
+\details{
+각 geohash 레코드는 중심점(위경도)으로 변환한 뒤 \code{cell_size}(m) 크기의
+정사각형 격자에 다시 집계한다(수치 속성은 칸 안에서 합산). \code{cell_size}에
+\code{\link{build_floating_geojson}}가 만든 유동인구 격자와 같은 값을 지정하면
+두 GeoJSON의 격자 칸 크기가 정확히 일치한다(기본값 50m은 유동인구 격자의
+통상적인 자동 추정값과 같다). 유동인구 격자 크기가 다르게 추정됐다면, 그
+결과의 \code{cell_size}(예: \code{build_floating_geojson(...)$cell_size})를
+그대로 넘겨 맞추는 것이 정확하다.
 }
