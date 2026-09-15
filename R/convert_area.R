@@ -63,7 +63,7 @@ build_area_geojson <- function(source_path, out_path = NULL, log = NULL) {
     out_path <- file.path(dir, sprintf("상권_%s.geojson", .output_timestamp()))
   }
 
-  jsonlite::write_json(geojson, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)
+  jsonlite::write_json(geojson, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE, digits = 15)
 
   log(sprintf("상권 GeoJSON 생성 완료: %s (%d개 상권)", out_path, length(features)))
   list(out_path = out_path, count = length(features))

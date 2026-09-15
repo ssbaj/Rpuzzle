@@ -2,13 +2,14 @@
 % Please edit documentation in R/convert_floating.R
 \name{build_floating_geojson}
 \alias{build_floating_geojson}
-\title{유동인구 데이터를 GeoJSON(Point FeatureCollection)으로 저장한다}
+\title{유동인구 데이터를 GeoJSON(정사각형 격자 Polygon FeatureCollection)으로 저장한다}
 \usage{
 build_floating_geojson(
   source_path,
   script_path = NULL,
   out_path = NULL,
-  log = NULL
+  log = NULL,
+  cell_size = NULL
 )
 }
 \arguments{
@@ -20,12 +21,22 @@ build_floating_geojson(
 같은 폴더에 "유동인구_YYMMDDHHMMSS.geojson"(생성 시각)으로 저장한다.}
 
 \item{log}{진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.}
+
+\item{cell_size}{격자 한 칸의 크기(m). \code{NULL}이면 자동으로 추정한다.}
 }
 \value{
-\code{list(out_path = ..., count = ...)}.
+\code{list(out_path = ..., count = ...)}. \code{count}는 격자에
+  집계된 원본 지점 수다.
 }
 \description{
 1) 먼저 \code{script_path}(요청 스크립트, R 코드)를 실행해 실시간 데이터를
 시도한다. 2) 실패하면 원본 \code{source_path}(캐시된 JSON)를 사용한다.
 자세한 내용은 \code{\link{run_fetch_script}}를 참고한다.
+}
+\details{
+점들의 bounding box 전체를 격자(빈 칸 포함)로 채우고, 각 칸에 속한 점들의
+값을 합산해 "value" 속성으로 담는다. 격자 한 칸의 크기(m)는 \code{cell_size}로
+직접 지정하지 않으면 점 간격을 재서 자동으로 추정한다(퍼즐 API가 항상 같은
+줌 레벨로 응답하는 한 보통 50m). 같은 이름의 .qml 스타일 파일도 함께 저장해
+QGIS에서 열면 값 크기별로 자동 색상이 입혀지게 한다.
 }

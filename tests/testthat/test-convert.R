@@ -62,10 +62,10 @@ test_that("build_card_geojson converts geohash records into a Polygon FeatureCol
   expect_equal(feature$properties$amount, 12345)
 })
 
-test_that("build_floating_geojson converts [lat, lng, count] points into a Point FeatureCollection", {
+test_that("build_floating_geojson converts [lat, lng, count] points into a Polygon grid FeatureCollection", {
   src <- tempfile(fileext = ".txt")
   out <- tempfile(fileext = ".geojson")
-  on.exit(unlink(c(src, out)))
+  on.exit(unlink(c(src, out, sub("\\.geojson$", ".qml", out))))
 
   writeLines('[[37.5, 127.0, 42]]', src, useBytes = TRUE)
 
@@ -73,10 +73,27 @@ test_that("build_floating_geojson converts [lat, lng, count] points into a Point
   expect_equal(result$count, 1)
 
   geojson <- jsonlite::read_json(out)
+  expect_length(geojson$features, 1)
   feature <- geojson$features[[1]]
-  expect_equal(feature$geometry$type, "Point")
-  expect_equal(unlist(feature$geometry$coordinates), c(127.0, 37.5))
-  expect_equal(feature$properties$count, 42)
+  expect_equal(feature$geometry$type, "Polygon")
+  expect_equal(feature$properties$value, 42)
+  expect_equal(feature$properties$count, 1)
+
+  qml_path <- sub("\\.geojson$", ".qml", out)
+  expect_true(file.exists(qml_path))
+})
+
+test_that("build_value_grid aggregates multiple points into one cell and fills empty cells with 0", {
+  lat <- c(37.5000, 37.5001)
+  lng <- c(127.0000, 127.0001)
+  value <- c(10, 20)
+
+  grid <- build_value_grid(lat, lng, value, cell_size = 500)
+  expect_equal(grid$ncols * grid$nrows, length(grid$features))
+
+  values <- vapply(grid$features, function(f) f$properties$value, numeric(1))
+  expect_equal(sum(values), 30)
+  expect_true(any(values == 0))
 })
 
 test_that("build_*_geojson default out_path embeds a '<name>_YYMMDDHHMMSS.geojson' timestamp", {

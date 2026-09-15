@@ -63,7 +63,7 @@ build_card_geojson <- function(source_path, script_path = NULL, out_path = NULL,
     out_path <- file.path(dir, sprintf("카드매출_%s.geojson", .output_timestamp()))
   }
 
-  jsonlite::write_json(geojson, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)
+  jsonlite::write_json(geojson, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE, digits = 15)
 
   list(out_path = out_path, count = length(features))
 }

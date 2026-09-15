@@ -72,7 +72,7 @@ merge_floating_json <- function(path1, path2, out_path = NULL, log = NULL) {
     out_path <- file.path(dir, "유동인구_merged.json")
   }
 
-  jsonlite::write_json(merged, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)
+  jsonlite::write_json(merged, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE, digits = 15)
   log(sprintf("유동인구 JSON 합치기 완료: %s (%d개 지점)", out_path, length(merged_points)))
 
   list(out_path = out_path, count = length(merged_points))
@@ -108,7 +108,7 @@ merge_card_json <- function(path1, path2, out_path = NULL, log = NULL) {
     out_path <- file.path(dir, "카드매출_merged.json")
   }
 
-  jsonlite::write_json(merged, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)
+  jsonlite::write_json(merged, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE, digits = 15)
   log(sprintf("카드매출 JSON 합치기 완료: %s (%d개 레코드)", out_path, length(merged_records)))
 
   list(out_path = out_path, count = length(merged_records))
@@ -144,7 +144,7 @@ merge_area_json <- function(path1, path2, out_path = NULL, log = NULL) {
     out_path <- file.path(dir, "상권_merged.json")
   }
 
-  jsonlite::write_json(merged, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE)
+  jsonlite::write_json(merged, out_path, auto_unbox = TRUE, null = "null", pretty = TRUE, digits = 15)
   log(sprintf("상권 JSON 합치기 완료: %s (%d개 상권)", out_path, length(merged_areas)))
 
   list(out_path = out_path, count = length(merged_areas))
