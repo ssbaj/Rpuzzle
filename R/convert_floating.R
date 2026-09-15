@@ -47,10 +47,8 @@
 #'   같은 폴더에 "유동인구_YYMMDDHHMMSS.geojson"(생성 시각)으로 저장한다.
 #' @param log 진행 메시지를 받을 1-인자 함수. \code{NULL}이면 무시한다.
 #' @param cell_size 격자 한 칸의 크기(m). \code{NULL}이면 자동으로 추정한다.
-#' @return \code{list(out_path = ..., count = ..., cell_size = ...)}. \code{count}는
-#'   격자에 집계된 원본 지점 수, \code{cell_size}는 실제 사용된 격자 칸 크기(m)다
-#'   (카드매출 격자를 이 값과 같은 \code{cell_size}로 만들면 \code{\link{build_card_geojson}}의
-#'   격자와 크기가 일치한다).
+#' @return \code{list(out_path = ..., count = ...)}. \code{count}는 격자에
+#'   집계된 원본 지점 수다.
 #' @export
 build_floating_geojson <- function(source_path, script_path = NULL, out_path = NULL, log = NULL,
                                     cell_size = NULL) {
@@ -87,5 +85,5 @@ build_floating_geojson <- function(source_path, script_path = NULL, out_path = N
   write_graduated_qml(qml_path, values = values)
   log(sprintf("QGIS 스타일 저장: %s", qml_path))
 
-  list(out_path = out_path, count = length(parsed$lat), cell_size = grid$cell_size)
+  list(out_path = out_path, count = length(parsed$lat))
 }

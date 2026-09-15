@@ -36,10 +36,6 @@ puzzle_app <- function() {
   card_var <- tcltk::tclVar("")
   area_var <- tcltk::tclVar("")
 
-  # 유동인구 GeoJSON을 만들 때 실제로 쓰인 격자 칸 크기(m). 카드매출 GeoJSON을
-  # 만들 때 이 값을 그대로 넘겨, 두 GeoJSON의 격자 크기가 항상 일치하게 한다.
-  last_floating_cell_size <- NULL
-
   frame <- tcltk::ttkframe(win, padding = 20)
   tcltk::tkpack(frame, fill = "both", expand = TRUE)
 
@@ -94,9 +90,7 @@ puzzle_app <- function() {
               icon = "error")
       return(invisible(NULL))
     }
-    last_floating_cell_size <<- result$cell_size
-    .notify("완료", sprintf("유동인구 GeoJSON 생성 완료\n\n%s\n지점 수: %d\n격자 크기: %.0fm",
-                          result$out_path, result$count, result$cell_size))
+    .notify("완료", sprintf("유동인구 GeoJSON 생성 완료\n\n%s\n지점 수: %d", result$out_path, result$count))
   }
 
   generate_card <- function() {
@@ -105,18 +99,13 @@ puzzle_app <- function() {
       .notify("입력 확인", "카드매출.txt 파일을 지정해주세요.", icon = "warning")
       return(invisible(NULL))
     }
-    # 같은 세션에서 유동인구 GeoJSON을 먼저 만들었다면 그 격자 크기를 그대로
-    # 써서 두 GeoJSON의 격자 크기를 맞춘다. 없으면 기본값(50m)을 쓴다.
-    cell_size <- if (!is.null(last_floating_cell_size)) last_floating_cell_size else 50.0
-    result <- tryCatch(build_card_geojson(data_path, NULL, cell_size = cell_size), error = function(e) e)
+    result <- tryCatch(build_card_geojson(data_path, NULL), error = function(e) e)
     if (inherits(result, "error")) {
       .notify("오류", sprintf("카드매출 GeoJSON 생성 중 오류가 발생했습니다:\n%s", conditionMessage(result)),
               icon = "error")
       return(invisible(NULL))
     }
-    .notify("완료", sprintf("카드매출 GeoJSON 생성 완료\n\n%s\n원본 레코드 수: %d\n격자 크기: %.0fm%s",
-                          result$out_path, result$count, cell_size,
-                          if (!is.null(last_floating_cell_size)) " (유동인구 격자와 동일)" else ""))
+    .notify("완료", sprintf("카드매출 GeoJSON 생성 완료\n\n%s\n격자 수: %d", result$out_path, result$count))
   }
 
   generate_area <- function() {

@@ -62,55 +62,6 @@ test_that("build_card_geojson converts geohash records into a Polygon FeatureCol
   expect_equal(feature$properties$amount, 12345)
 })
 
-test_that("build_card_geojson regrids geohash records onto a fixed cell_size square grid (matching build_floating_geojson)", {
-  card_src <- tempfile(fileext = ".txt")
-  card_out <- tempfile(fileext = ".geojson")
-  on.exit(unlink(c(card_src, card_out)))
-
-  writeLines('{"data": [
-    {"geohash": "wydm9", "amount": 100},
-    {"geohash": "wydm9", "amount": 50},
-    {"geohash": "wydmc", "amount": 30}
-  ]}', card_src, useBytes = TRUE)
-
-  cell_size <- 50
-  result <- build_card_geojson(card_src, script_path = NULL, out_path = card_out, cell_size = cell_size)
-  expect_equal(result$count, 3)
-
-  geojson <- jsonlite::read_json(card_out)
-  ring <- geojson$features[[1]]$geometry$coordinates[[1]]
-  lon0 <- ring[[1]][[1]]; lon1 <- ring[[2]][[1]]
-  lat0 <- ring[[1]][[2]]; lat1 <- ring[[3]][[2]]
-  mlon <- 111320 * cos(lat0 * pi / 180)
-  width_m <- abs(lon1 - lon0) * mlon
-  height_m <- abs(lat1 - lat0) * 111320
-  expect_equal(width_m, cell_size, tolerance = 0.1)
-  expect_equal(height_m, cell_size, tolerance = 0.1)
-
-  amounts <- vapply(geojson$features, function(f) {
-    a <- f$properties$amount
-    if (is.null(a)) 0 else a
-  }, numeric(1))
-  expect_equal(sum(amounts), 180)
-})
-
-test_that("build_card_geojson's cell_size matches build_floating_geojson's when given the same value", {
-  float_src <- tempfile(fileext = ".txt")
-  float_out <- tempfile(fileext = ".geojson")
-  card_src <- tempfile(fileext = ".txt")
-  card_out <- tempfile(fileext = ".geojson")
-  on.exit(unlink(c(float_src, float_out, sub("\\.geojson$", ".qml", float_out), card_src, card_out)))
-
-  writeLines('[[37.5000, 127.0000, 10], [37.5010, 127.0010, 20]]', float_src, useBytes = TRUE)
-  float_result <- build_floating_geojson(float_src, script_path = NULL, out_path = float_out, cell_size = 50)
-  expect_equal(float_result$cell_size, 50)
-
-  writeLines('{"data": [{"geohash": "wydm9", "amount": 1}]}', card_src, useBytes = TRUE)
-  card_result <- build_card_geojson(card_src, script_path = NULL, out_path = card_out,
-                                     cell_size = float_result$cell_size)
-  expect_equal(card_result$count, 1)
-})
-
 test_that("build_floating_geojson converts [lat, lng, count] points into a Polygon grid FeatureCollection", {
   src <- tempfile(fileext = ".txt")
   out <- tempfile(fileext = ".geojson")

@@ -25,10 +25,8 @@ build_floating_geojson(
 \item{cell_size}{격자 한 칸의 크기(m). \code{NULL}이면 자동으로 추정한다.}
 }
 \value{
-\code{list(out_path = ..., count = ..., cell_size = ...)}. \code{count}는
-  격자에 집계된 원본 지점 수, \code{cell_size}는 실제 사용된 격자 칸 크기(m)다
-  (카드매출 격자를 이 값과 같은 \code{cell_size}로 만들면 \code{\link{build_card_geojson}}의
-  격자와 크기가 일치한다).
+\code{list(out_path = ..., count = ...)}. \code{count}는 격자에
+  집계된 원본 지점 수다.
 }
 \description{
 1) 먼저 \code{script_path}(요청 스크립트, R 코드)를 실행해 실시간 데이터를
